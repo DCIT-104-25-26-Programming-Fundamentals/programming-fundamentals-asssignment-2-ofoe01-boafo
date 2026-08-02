@@ -39,6 +39,64 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+//                    SOLUTION
 #include <iostream>
-using namespace std;
+#include <vector>
 
+double calculateSum(const std::vector<double>& numbers) {
+    double total = 0.0;
+    for (double num : numbers) {
+        total += num;
+    }
+    return total;
+}
+
+double calculateAverage(const std::vector<double>& numbers) {
+    if (numbers.empty()) return 0.0;
+    return calculateSum(numbers) / numbers.size();
+}
+
+double calculateMax(const std::vector<double>& numbers) {
+    double maxVal = numbers[0];
+    for (size_t i = 1; i < numbers.size(); ++i) {
+        if (numbers[i] > maxVal) {
+            maxVal = numbers[i];
+        }
+    }
+    return maxVal;
+}
+
+double calculateMin(const std::vector<double>& numbers) {
+    double minVal = numbers[0];
+    for (size_t i = 1; i < numbers.size(); ++i) {
+        if (numbers[i] < minVal) {
+            minVal = numbers[i];
+        }
+    }
+    return minVal;
+}
+
+int main() {
+    int count = 0;
+    std::cout << "How many numbers? ";
+    std::cin >> count;
+
+    if (count <= 0) {
+        std::cout << "Please enter a number greater than 0.\n";
+        return 0;
+    }
+
+    std::vector<double> numbers(count);
+    for (int i = 0; i < count; ++i) {
+        std::cout << "Enter number " << (i + 1) << ": ";
+        std::cin >> numbers[i];
+    }
+
+    std::cout << "\nResults:\n";
+    std::cout << "Sum:     " << calculateSum(numbers) << "\n";
+    std::cout << "Average: " << calculateAverage(numbers) << "\n";
+    std::cout << "Maximum: " << calculateMax(numbers) << "\n";
+    std::cout << "Minimum: " << calculateMin(numbers) << "\n";
+
+    return 0;
+}

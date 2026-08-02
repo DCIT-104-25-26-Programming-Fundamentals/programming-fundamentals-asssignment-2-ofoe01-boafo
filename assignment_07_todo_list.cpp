@@ -75,8 +75,107 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+//                      SOLUTION
 #include <iostream>
 #include <vector>
 #include <string>
-using namespace std;
 
+// Display the main menu to the user
+void displayMenu() {
+    std::cout << "=================================\n";
+    std::cout << "        TO-DO LIST MENU          \n";
+    std::cout << "=================================\n";
+    std::cout << "1. Add task\n";
+    std::cout << "2. View tasks\n";
+    std::cout << "3. Delete task\n";
+    std::cout << "4. Quit\n";
+}
+
+// 1: Add a task
+void addTask(std::vector<std::string>& tasks) {
+    std::cout << "Enter task: ";
+    std::string taskDescription;
+    std::getline(std::cin >> std::ws, taskDescription); 
+
+    tasks.push_back(taskDescription);
+    std::cout << "Task added: \"" << taskDescription << "\"\n";
+}
+
+// 2: View all current task
+void viewTasks(const std::vector<std::string>& tasks) {
+    if (tasks.empty()) {
+        std::cout << "Your list is currently empty! You can add one if you have to.\n";
+        return;
+    }
+
+    std::cout << "Your Tasks:\n";
+    for (size_t i = 0; i < tasks.size(); ++i) {
+        std::cout << (i + 1) << ". " << tasks[i] << "\n";
+    }
+}
+
+// 3: Delete a task
+void deleteTask(std::vector<std::string>& tasks) {
+    if (tasks.empty()) {
+        std::cout << "No tasks available to delete. Lucky you!\n";
+        return;
+    }
+
+    std::cout << "Enter task number to delete: ";
+    int taskNumber;
+    
+    if (!(std::cin >> taskNumber)) {
+        std::cin.clear();
+        std::cin.ignore(10000, '\n'); 
+        std::cout << "Invalid input! Please enter a valid number.\n";
+        return;
+    }
+
+
+    if (taskNumber >= 1 && static_cast<size_t>(taskNumber) <= tasks.size()) {
+        std::string removedTask = tasks[taskNumber - 1];
+        tasks.erase(tasks.begin() + (taskNumber - 1));
+        std::cout << "Task \"" << removedTask << "\" has been removed.\n";
+    } else {
+        std::cout << "Error: Invalid task number.\n";
+    }
+}
+
+int main() {
+    std::vector<std::string> tasks; 
+    int choice = 0;
+
+    displayMenu();
+
+
+    while (choice != 4) {
+        std::cout << "\nEnter your choice (1-4): ";
+        
+        if (!(std::cin >> choice)) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n'); 
+            std::cout << "Invalid choice! Please enter a number between 1 and 4.\n";
+            continue;
+        }
+
+        switch (choice) {
+            case 1:
+                addTask(tasks);
+                break;
+            case 2:
+                viewTasks(tasks);
+                break;
+            case 3:
+                deleteTask(tasks);
+                break;
+            case 4:
+                std::cout << "Goodbye! See ya later!\n";
+                break;
+            default:
+                std::cout << "Invalid option! Please enter a number from 1 to 4.\n";
+                break;
+        }
+    }
+
+    return 0;
+}

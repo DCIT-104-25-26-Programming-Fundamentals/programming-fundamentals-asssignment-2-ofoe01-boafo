@@ -48,6 +48,79 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+//                         SOLUTION
 #include <iostream>
-using namespace std;
 
+// PART A: Print the First N Terms of the Fibonacci sequence
+void printFibonacciTerms(int n) {
+    if (n <= 0) {
+        std::cout << "Error: Number of terms must be a positive integer.\n";
+        return;
+    }
+
+    long long first = 0, second = 1;
+
+    std::cout << "Fibonacci sequence: ";
+
+    for (int i = 0; i < n; ++i) {
+        if (i == 0) {
+            std::cout << first;
+        } else if (i == 1) {
+            std::cout << " " << second;
+        } else {
+            long long next = first + second;
+            std::cout << " " << next;
+            first = second;
+            second = next;
+        }
+    }
+    std::cout << "\n";
+}
+
+// Part B
+bool isFibonacci(long long num) {
+    if (num < 0) {
+        return false;
+    }
+
+    if (num == 0 || num == 1) {
+        return true;
+    }
+
+    long long a = 0;
+    long long b = 1;
+    long long c = a + b;
+
+    while (c < num) {
+        a = b;
+        b = c;
+        c = a + b;
+    }
+
+    return (c == num);
+}
+
+int main() {
+    std::cout << "- PART A -\n";
+    int terms;
+    std::cout << "How many terms? ";
+    std::cin >> terms;
+
+    printFibonacciTerms(terms);
+
+    std::cout << "\n";
+
+    // --- PART B ---
+    std::cout << "- PART B -\n";
+    long long checkNum;
+    std::cout << "Enter a number to check: ";
+    std::cin >> checkNum;
+
+    if (isFibonacci(checkNum)) {
+        std::cout << checkNum << " is a Fibonacci number.\n";
+    } else {
+        std::cout << checkNum << " is NOT a Fibonacci number.\n";
+    }
+
+    return 0;
+}

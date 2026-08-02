@@ -77,9 +77,153 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+//                              SOLUTION
 #include <iostream>
 #include <vector>
 #include <string>
 #include <iomanip>
-using namespace std;
 
+struct Student {
+    std::string name;
+    int id;
+    std::vector<double> scores;
+};
+
+//calculating a student's average score
+double calculateAverage(const std::vector<double>& scores) {
+    if (scores.empty()) return 0.0;
+    
+    double sum = 0.0;
+    for (double score : scores) {
+        sum += score;
+    }
+    return sum / scores.size();
+}
+
+// Display of menu
+void displayMenu() {
+    std::cout << "=================================\n";
+    std::cout << "     STUDENT RECORD SYSTEM MENU  \n";
+    std::cout << "=================================\n";
+    std::cout << "1. Add student\n";
+    std::cout << "2. Display all students\n";
+    std::cout << "3. Calculate average score\n";
+    std::cout << "4. Quit\n";
+}
+
+//1: Add a Student
+void addStudent(std::vector<Student>& students) {
+    Student newStudent;
+    
+    std::cout << "Student name: ";
+    std::getline(std::cin >> std::ws, newStudent.name);
+    
+    std::cout << "Student ID: ";
+    std::cin >> newStudent.id;
+    
+    int scoreCount = 0;
+    std::cout << "How many scores? ";
+    std::cin >> scoreCount;
+    
+    for (int i = 0; i < scoreCount; ++i) {
+        double score;
+        std::cout << "Enter score " << (i + 1) << ": ";
+        std::cin >> score;
+        newStudent.scores.push_back(score);
+    }
+    
+    students.push_back(newStudent);
+    std::cout << "Student \"" << newStudent.name << "\" added successfully.\n";
+}
+
+//  2: Display ALL Students
+void displayAllStudents(const std::vector<Student>& students) {
+    if (students.empty()) {
+        std::cout << "No students have been added yet.\n";
+        return;
+    }
+    
+    std::cout << "\n---------------------------------------------------------------\n";
+    std::cout << std::left 
+              << std::setw(20) << "Name" 
+              << std::setw(12) << "ID" 
+              << std::setw(20) << "Scores" 
+              << std::setw(10) << "Average" << "\n";
+    std::cout << "---------------------------------------------------------------\n";
+    
+    for (const auto& student : students) {
+        std::string scoresStr = "";
+        for (size_t i = 0; i < student.scores.size(); ++i) {
+            scoresStr += std::to_string(static_cast<int>(student.scores[i]));
+            if (i < student.scores.size() - 1) scoresStr += ", ";
+        }
+        
+        std::cout << std::left 
+                  << std::setw(20) << student.name 
+                  << std::setw(12) << student.id 
+                  << std::setw(20) << scoresStr 
+                  << std::fixed << std::setprecision(2) << calculateAverage(student.scores) << "\n";
+    }
+    std::cout << "---------------------------------------------------------------\n";
+}
+
+// 3: Calculate Average Score for a Student
+void calculateStudentAverage(const std::vector<Student>& students) {
+    if (students.empty()) {
+        std::cout << "No students in the database.\n";
+        return;
+    }
+    
+    int searchId;
+    std::cout << "Enter student ID: ";
+    std::cin >> searchId;
+    
+    for (const auto& student : students) {
+        if (student.id == searchId) {
+            double avg = calculateAverage(student.scores);
+            std::cout << student.name << "'s average score: " 
+                      << std::fixed << std::setprecision(2) << avg << "\n";
+            return;
+        }
+    }
+    
+    std::cout << "Error: Student with ID " << searchId << " was not found.\n";
+}
+
+int main() {
+    std::vector<Student> students;
+    int choice = 0;
+    
+    displayMenu();
+    
+    while (choice != 4) {
+        std::cout << "\nEnter your choice (1-4): ";
+        
+        if (!(std::cin >> choice)) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Invalid menu choice! Please enter a number between 1 and 4.\n";
+            continue;
+        }
+        
+        switch (choice) {
+            case 1:
+                addStudent(students);
+                break;
+            case 2:
+                displayAllStudents(students);
+                break;
+            case 3:
+                calculateStudentAverage(students);
+                break;
+            case 4:
+                std::cout << "Goodbye! See ya next time.\n";
+                break;
+            default:
+                std::cout << "Invalid choice! Please choose an option between 1 and 4.\n";
+                break;
+        }
+    }
+    
+    return 0;
+}
